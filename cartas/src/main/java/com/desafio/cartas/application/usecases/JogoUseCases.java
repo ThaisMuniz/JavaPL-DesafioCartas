@@ -1,8 +1,9 @@
 package com.desafio.cartas.application.usecases;
 
-import com.desafio.cartas.domain.jogo.JogoResponseDTO;
+import com.desafio.cartas.infrastructure.adapters.in.controller.JogoResponseDto;
+import com.desafio.cartas.infrastructure.exceptions.BaralhoClientException;
 
 public interface JogoUseCases {
 
-    JogoResponseDTO jogar(int qtdJogadores, int qtdCartasPorMao);
+    JogoResponseDto jogar(int qtdJogadores, int qtdCartasPorMao) throws BaralhoClientException;
 }

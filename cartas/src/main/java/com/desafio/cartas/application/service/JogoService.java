@@ -1,88 +1,65 @@
 package com.desafio.cartas.application.service;
 
+import com.desafio.cartas.application.usecases.BaralhoUseCases;
 import com.desafio.cartas.application.usecases.JogoUseCases;
-import com.desafio.cartas.domain.jogo.JogoResponseDTO;
-import com.desafio.cartas.model.entity.Carta;
-import com.desafio.cartas.model.entity.Jogador;
-import com.desafio.cartas.model.entity.Jogo;
-import com.desafio.cartas.model.entity.Mao;
-import com.desafio.cartas.model.repository.JogoRepository;
+import com.desafio.cartas.domain.Jogador;
+import com.desafio.cartas.domain.Jogo;
+import com.desafio.cartas.domain.JogoRepository;
+import com.desafio.cartas.domain.Mao;
+import com.desafio.cartas.infrastructure.adapters.in.controller.JogoResponseDto;
+import com.desafio.cartas.infrastructure.adapters.out.repository.JogoRepositoryImpl;
+import com.desafio.cartas.infrastructure.exceptions.BaralhoClientException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JogoService implements JogoUseCases {
 
     private final JogoRepository jogoRepository;
 
-    public JogoService(JogoRepository jogoRepository) {
-        this.jogoRepository = jogoRepository;
+    private final BaralhoUseCases baralhoUseCases;
+
+    public JogoService(JogoRepositoryImpl jogoRepositoryImpl, BaralhoService baralhoService) {
+        this.jogoRepository = jogoRepositoryImpl;
+        this.baralhoUseCases = baralhoService;
     }
 
-    public JogoResponseDTO jogar(int qtdJogadores, int qtdCartasPorMao) {
+    public JogoResponseDto jogar(int qtdJogadores, int qtdCartasPorMao) throws BaralhoClientException{
         Jogo jogo = new Jogo(qtdJogadores, qtdCartasPorMao);
-        jogo.setMaos(recuperarMaosPorJogador(jogo));
-        jogo.setVencedores(apurarVencedores(jogo.getMaos()));
-        jogo = this.save(jogo);
+        recuperarMaosPorJogador(jogo);
+        apurarVencedores(jogo);
+        this.salvar(jogo);
 
-        return new JogoResponseDTO(jogo.getVencedores());
+        return new JogoResponseDto(jogo.getVencedores().stream().map(Jogador::getNome).toList().toString());
     }
 
-    private List<Jogador> apurarVencedores(List<Mao> maos) {
-        List<Jogador> vencedores = new ArrayList<>();
+    private void apurarVencedores(Jogo jogo) {
+        List<Jogador> jogadoresVencedores = new ArrayList<>();
 
-        //TODO apuração dos vencedores
-        vencedores.add(maos.get(1).getJogador());
+        Optional<Integer> maiorValorOp = jogo.getMaos().stream()
+                .map(Mao::getValor)
+                .max(Comparator.naturalOrder());
 
-        return vencedores;
+        if (maiorValorOp.isPresent()) {
+            jogadoresVencedores = jogo.getMaos().stream()
+                    .filter(obj -> obj.getValor() == maiorValorOp.get())
+                    .map(Mao::getJogador)
+                    .toList();
+        }
+
+        jogo.setVencedores(jogadoresVencedores);
     }
 
-    private List<Mao> recuperarMaosPorJogador(Jogo jogo){
-        List<Mao> maos = new ArrayList<>();
-        //TODO acessar serviço de baralho
-
-        Mao mao1 = new Mao();
-        Jogador jogador1 = new Jogador();
-        jogador1.setNome("Maria");
-        mao1.setJogador(jogador1);
-        mao1.setJogo(jogo);
-        Carta carta1 = new Carta();
-        carta1.setNaipe("copas");
-        carta1.setValor("1");
-        Carta carta2 = new Carta();
-        carta2.setNaipe("espadas");
-        carta2.setValor("A");
-        List<Carta> cartas = new ArrayList<>();
-        cartas.add(carta1);
-        cartas.add(carta2);
-        mao1.setCartas(cartas);
-
-        Mao mao2 = new Mao();
-        Jogador jogador2 = new Jogador();
-        jogador2.setNome("João");
-        mao2.setJogador(jogador2);
-        mao2.setJogo(jogo);
-        Carta carta3 = new Carta();
-        carta1.setNaipe("ouros");
-        carta1.setValor("8");
-        Carta carta4 = new Carta();
-        carta2.setNaipe("espadas");
-        carta2.setValor("K");
-        cartas = new ArrayList<>();
-        cartas.add(carta3);
-        cartas.add(carta4);
-        mao2.setCartas(cartas);
-
-        maos.add(mao1);
-        maos.add(mao2);
-
-        return maos;
+    private void recuperarMaosPorJogador(Jogo jogo) throws BaralhoClientException {
+        jogo.setMaos(baralhoUseCases.recuperarMaos(jogo));
     }
 
-    Jogo save(Jogo jogo) {
-        return this.jogoRepository.save(jogo);
+    void salvar(Jogo jogo) {
+        this.jogoRepository.salvar(jogo);
     }
 
 }

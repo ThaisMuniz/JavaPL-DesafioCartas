@@ -1,10 +1,10 @@
-package com.desafio.cartas.model.entity;
+package com.desafio.cartas.infrastructure.adapters.out.entity;
 
 import jakarta.persistence.*;
 
 @Table
 @Entity(name = "jogador")
-public class Jogador {
+public class JpaJogadorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +12,12 @@ public class Jogador {
 
     @Column
     private String nome;
+
+    public JpaJogadorEntity() {}
+
+    public JpaJogadorEntity(String nome) {
+        this.nome = nome;
+    }
 
     public Long getId() {
         return id;

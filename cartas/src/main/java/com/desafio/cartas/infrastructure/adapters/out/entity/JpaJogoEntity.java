@@ -1,5 +1,8 @@
-package com.desafio.cartas.model.entity;
+package com.desafio.cartas.infrastructure.adapters.out.entity;
 
+import com.desafio.cartas.domain.Jogador;
+import com.desafio.cartas.domain.Jogo;
+import com.desafio.cartas.domain.Mao;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name="jogo")
-public class Jogo {
+public class JpaJogoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,21 +27,19 @@ public class Jogo {
     private int qtdCartasPorMao;
 
     @OneToMany(mappedBy = "jogo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Mao> maos;
+    private List<JpaMaoEntity> maos;
 
-    @ManyToMany
-    private List<Jogador> vencedores;
+    @Column
+    private String vencedores;
 
-    public Jogo(int qtdJogadores, int qtdCartasPorMao) {
-        this.dataHora = Calendar.getInstance();
-        this.qtdJogadores = qtdJogadores;
-        this.qtdCartasPorMao = qtdCartasPorMao;
-        this.maos = new ArrayList<>();
-        this.vencedores = new ArrayList<>();
-    }
+    public JpaJogoEntity(){}
 
-    public Jogo() {
-
+    public JpaJogoEntity(Jogo jogo) {
+        this.dataHora = jogo.getDataHora();
+        this.qtdJogadores = jogo.getQtdJogadores();
+        this.qtdCartasPorMao = jogo.getQtdCartasPorMao();
+        this.maos = jogo.getMaos().stream().map(JpaMaoEntity::new).toList();
+        this.vencedores = jogo.getVencedores().stream().map(Jogador::getNome).toList().toString();
     }
 
     public Long getId() {
@@ -61,19 +62,11 @@ public class Jogo {
         return qtdCartasPorMao;
     }
 
-    public List<Mao> getMaos() {
+    public List<JpaMaoEntity> getMaos() {
         return maos;
     }
 
-    public void setMaos(List<Mao> maos) {
-        this.maos = maos;
-    }
-
-    public List<Jogador> getVencedores() {
+    public String getVencedores() {
         return vencedores;
-    }
-
-    public void setVencedores(List<Jogador> vencedores) {
-        this.vencedores = vencedores;
     }
 }
