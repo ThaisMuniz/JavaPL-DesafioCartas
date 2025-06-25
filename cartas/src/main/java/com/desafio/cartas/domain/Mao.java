@@ -1,45 +1,21 @@
 package com.desafio.cartas.domain;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Mao {
-
-    private Jogo jogo;
-    private Jogador jogador;
-    private List<Carta> cartas;
-    private int valor;
-
-    public Mao(){}
-
-    public Jogo getJogo() {
-        return jogo;
-    }
-
-    public void setJogo(Jogo jogo) {
-        this.jogo = jogo;
-    }
-
-    public Jogador getJogador() {
-        return jogador;
-    }
-
-    public void setJogador(Jogador jogador) {
-        this.jogador = jogador;
-    }
-
-    public List<Carta> getCartas() {
-        return cartas;
-    }
-
-    public void setCartas(List<Carta> cartas) {
-        this.cartas = cartas;
-    }
+public record Mao (Jogo jogo,
+                   Jogador jogador,
+                   List<Carta> cartas) {
 
     public int getValor() {
-        return valor;
+        if (cartas == null || cartas.isEmpty()) {
+            return 0;
+        }
+        AtomicInteger valorDaMao = new AtomicInteger();
+        cartas.forEach(carta -> {
+            valorDaMao.addAndGet(carta.getValorInteiro());
+        });
+        return valorDaMao.get();
     }
 
-    public void setValor(int valor) {
-        this.valor = valor;
-    }
 }

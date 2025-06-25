@@ -7,7 +7,6 @@ import com.desafio.cartas.domain.Jogo;
 import com.desafio.cartas.domain.JogoRepository;
 import com.desafio.cartas.domain.Mao;
 import com.desafio.cartas.infrastructure.adapters.in.controller.JogoResponseDto;
-import com.desafio.cartas.infrastructure.adapters.out.repository.JogoRepositoryImpl;
 import com.desafio.cartas.infrastructure.exceptions.BaralhoClientException;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +22,9 @@ public class JogoService implements JogoUseCases {
 
     private final BaralhoUseCases baralhoUseCases;
 
-    public JogoService(JogoRepositoryImpl jogoRepositoryImpl, BaralhoService baralhoService) {
-        this.jogoRepository = jogoRepositoryImpl;
-        this.baralhoUseCases = baralhoService;
+    public JogoService(JogoRepository jogoRepository, BaralhoUseCases baralhoUseCases) {
+        this.jogoRepository = jogoRepository;
+        this.baralhoUseCases = baralhoUseCases;
     }
 
     public JogoResponseDto jogar(int qtdJogadores, int qtdCartasPorMao) throws BaralhoClientException{
@@ -33,11 +32,10 @@ public class JogoService implements JogoUseCases {
         recuperarMaosPorJogador(jogo);
         apurarVencedores(jogo);
         this.salvar(jogo);
-
-        return new JogoResponseDto(jogo.getVencedores().stream().map(Jogador::getNome).toList().toString());
+        return new JogoResponseDto(jogo.getVencedores().stream().map(Jogador::nome).toList().toString());
     }
 
-    private void apurarVencedores(Jogo jogo) {
+    void apurarVencedores(Jogo jogo) {
         List<Jogador> jogadoresVencedores = new ArrayList<>();
 
         Optional<Integer> maiorValorOp = jogo.getMaos().stream()
@@ -46,20 +44,19 @@ public class JogoService implements JogoUseCases {
 
         if (maiorValorOp.isPresent()) {
             jogadoresVencedores = jogo.getMaos().stream()
-                    .filter(obj -> obj.getValor() == maiorValorOp.get())
-                    .map(Mao::getJogador)
+                    .filter(mao -> mao.getValor() == maiorValorOp.get())
+                    .map(Mao::jogador)
                     .toList();
         }
-
         jogo.setVencedores(jogadoresVencedores);
     }
 
-    private void recuperarMaosPorJogador(Jogo jogo) throws BaralhoClientException {
+    void recuperarMaosPorJogador(Jogo jogo) throws BaralhoClientException {
         jogo.setMaos(baralhoUseCases.recuperarMaos(jogo));
     }
 
     void salvar(Jogo jogo) {
-        this.jogoRepository.salvar(jogo);
+        jogoRepository.salvar(jogo);
     }
 
 }

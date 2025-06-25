@@ -1,8 +1,5 @@
 package com.desafio.cartas.infrastructure.adapters.out.entity;
 
-import com.desafio.cartas.domain.Carta;
-import com.desafio.cartas.domain.Jogador;
-import com.desafio.cartas.domain.Jogo;
 import com.desafio.cartas.domain.Mao;
 import jakarta.persistence.*;
 
@@ -33,17 +30,9 @@ public class JpaMaoEntity {
     public JpaMaoEntity() {}
 
     public JpaMaoEntity(Mao mao) {
-        this.jogador = new JpaJogadorEntity(mao.getJogador().getNome());
-        this.cartas = mao.getCartas().stream().map(carta -> new JpaCartaEntity(carta.getNaipe(), carta.getValor())).toList();
+        this.jogador = new JpaJogadorEntity(mao.jogador().nome());
+        this.cartas = mao.cartas().stream().map(carta -> new JpaCartaEntity(carta.naipe(), carta.valor())).toList();
         this.valor = mao.getValor();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public JpaJogadorEntity getJogador() {
@@ -70,11 +59,4 @@ public class JpaMaoEntity {
         this.cartas = cartas;
     }
 
-    public int getValor() {
-        return valor;
-    }
-
-    public void setValor(int valor) {
-        this.valor = valor;
-    }
 }

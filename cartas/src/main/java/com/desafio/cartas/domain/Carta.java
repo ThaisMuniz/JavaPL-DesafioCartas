@@ -1,23 +1,12 @@
 package com.desafio.cartas.domain;
 
-public class Carta {
+import com.desafio.cartas.util.CardsValuesEnum;
 
-    private String naipe;
-    private String valor;
+public record Carta (String naipe,
+                     String valor) {
 
-    public String getNaipe() {
-        return naipe;
+    public int getValorInteiro () {
+        return CardsValuesEnum.getValor(this.valor);
     }
 
-    public void setNaipe(String naipe) {
-        this.naipe = naipe;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
 }

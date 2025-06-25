@@ -2,10 +2,8 @@ package com.desafio.cartas.infrastructure.adapters.out.entity;
 
 import com.desafio.cartas.domain.Jogador;
 import com.desafio.cartas.domain.Jogo;
-import com.desafio.cartas.domain.Mao;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -39,34 +37,7 @@ public class JpaJogoEntity {
         this.qtdJogadores = jogo.getQtdJogadores();
         this.qtdCartasPorMao = jogo.getQtdCartasPorMao();
         this.maos = jogo.getMaos().stream().map(JpaMaoEntity::new).toList();
-        this.vencedores = jogo.getVencedores().stream().map(Jogador::getNome).toList().toString();
+        this.vencedores = jogo.getVencedores().stream().map(Jogador::nome).toList().toString();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Calendar getDataHora() {
-        return dataHora;
-    }
-
-    public int getQtdJogadores() {
-        return qtdJogadores;
-    }
-
-    public int getQtdCartasPorMao() {
-        return qtdCartasPorMao;
-    }
-
-    public List<JpaMaoEntity> getMaos() {
-        return maos;
-    }
-
-    public String getVencedores() {
-        return vencedores;
-    }
 }
