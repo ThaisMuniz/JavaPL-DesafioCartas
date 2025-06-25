@@ -18,29 +18,9 @@ public class JpaCartaEntity {
 
     public JpaCartaEntity() {}
 
-    public JpaCartaEntity(String naipe, String valor) {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNaipe() {
-        return naipe;
-    }
-
-    public void setNaipe(String naipe) {
+    public JpaCartaEntity(String naipe, String valor) {
         this.naipe = naipe;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
         this.valor = valor;
     }
+
 }
