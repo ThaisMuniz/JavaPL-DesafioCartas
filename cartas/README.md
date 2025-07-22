@@ -14,8 +14,8 @@ O projeto é construído com Spring Boot e utiliza as seguintes ferramentas e bi
 - Java 21
 - Framework: Spring Boot 3.5.3
 - Banco de Dados:
-  - Produção: MySQL (via Docker)
-  - Testes: H2 Database (banco de dados em memória)
+    - Produção: MySQL (via Docker)
+    - Testes: H2 Database (banco de dados em memória)
 - ORM: Spring Data JPA
 - Conectividade Externa: Spring Cloud OpenFeign (para comunicação com APIs REST externas, como a deckofcardsapi.com)
 - Mapeamento de Objetos: MapStruct 1.6.3
@@ -45,3 +45,4 @@ http://localhost:8080/swagger-ui/index.html
 
 (A porta 8080 é a padrão, mas verifique se há alguma configuração diferente no seu application.properties/application.yml).
 
+.
