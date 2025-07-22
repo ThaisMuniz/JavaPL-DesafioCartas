@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface BaralhoFeignClient {
 
     @GetMapping("/new/shuffle/?deck_count=1")
-    ResponseEntity<DeckDto> obterBaralhoID();
+    ResponseEntity<DeckDto> getDeckId();
 
     @GetMapping("/{deck_id}/draw/?count={count}")
-    ResponseEntity<DrawDto> obterCartas(@PathVariable String deck_id, @RequestParam int count);
+    ResponseEntity<DrawDto> getCardsFromDeck(@PathVariable String deck_id, @RequestParam int count);
 }

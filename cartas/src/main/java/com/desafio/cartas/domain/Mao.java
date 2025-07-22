@@ -3,8 +3,7 @@ package com.desafio.cartas.domain;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public record Mao (Jogo jogo,
-                   Jogador jogador,
+public record Mao (Jogador jogador,
                    List<Carta> cartas) {
 
     public int getValor() {

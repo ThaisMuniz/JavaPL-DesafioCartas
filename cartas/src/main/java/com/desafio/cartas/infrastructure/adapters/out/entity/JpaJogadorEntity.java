@@ -15,8 +15,4 @@ public class JpaJogadorEntity {
 
     public JpaJogadorEntity() {}
 
-    public JpaJogadorEntity(String nome) {
-        this.nome = nome;
-    }
-
 }

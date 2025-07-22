@@ -17,7 +17,7 @@ public class MaoTests {
         cartas.add(new Carta("HEARTS","ACE"));
         cartas.add(new Carta("SPADES","10"));
         cartas.add(new Carta("CLUBS","8"));
-        Mao mao = new Mao (null, null, cartas);
+        Mao mao = new Mao (null, cartas);
 
         Assertions.assertEquals(19,  mao.getValor());
     }
@@ -28,7 +28,7 @@ public class MaoTests {
         cartas.add(new Carta("HEARTS","A"));
         cartas.add(new Carta("SPADES","10"));
         cartas.add(new Carta("CLUBS","8"));
-        Mao mao = new Mao (null, null, cartas);
+        Mao mao = new Mao (null, cartas);
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, mao::getValor);
 
@@ -37,7 +37,7 @@ public class MaoTests {
 
     @Test
     void testGetValorVazioSucesso() {
-        Mao mao = new Mao (null, null, new ArrayList<>());
+        Mao mao = new Mao (null, new ArrayList<>());
 
         Assertions.assertEquals(0,  mao.getValor());
     }

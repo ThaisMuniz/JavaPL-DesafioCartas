@@ -1,8 +1,8 @@
 package com.desafio.cartas.infrastructure.adapters.out.entity;
 
-import com.desafio.cartas.domain.Mao;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,18 +22,13 @@ public class JpaMaoEntity {
     private JpaJogadorEntity jogador;
 
     @ManyToMany(cascade=CascadeType.PERSIST)
-    private List<JpaCartaEntity> cartas;
+    @JoinTable(name = "MAO_CARTAS")
+    private List<JpaCartaEntity> cartas = new ArrayList<>();
 
     @Column(nullable = false)
     private int valor;
 
     public JpaMaoEntity() {}
-
-    public JpaMaoEntity(Mao mao) {
-        this.jogador = new JpaJogadorEntity(mao.jogador().nome());
-        this.cartas = mao.cartas().stream().map(carta -> new JpaCartaEntity(carta.naipe(), carta.valor())).toList();
-        this.valor = mao.getValor();
-    }
 
     public JpaJogadorEntity getJogador() {
         return jogador;

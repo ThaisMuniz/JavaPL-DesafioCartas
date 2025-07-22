@@ -6,11 +6,14 @@ import java.util.List;
 
 public class Jogo {
 
+    private Long id;
     private Calendar dataHora;
     private int qtdJogadores;
     private int qtdCartasPorMao;
     private List<Mao> maos;
     private List<Jogador> vencedores;
+
+    public Jogo(){}
 
     public Jogo(int qtdJogadores, int qtdCartasPorMao) {
         this.dataHora = Calendar.getInstance();
@@ -18,6 +21,10 @@ public class Jogo {
         this.qtdCartasPorMao = qtdCartasPorMao;
         this.maos = new ArrayList<>();
         this.vencedores = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Calendar getDataHora() {

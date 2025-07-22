@@ -36,23 +36,8 @@ public class CarteadoController {
     @PostMapping(value = "/jogar/{qtdJogadores}/{qtdCartasPorMao}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<JogoResponseDto> jogar(@PathVariable int qtdJogadores,
                                           @PathVariable int qtdCartasPorMao) throws BaralhoClientException, ParametrosDeJogoInvalidosException {
-        validarParametrosDoJogo(qtdJogadores, qtdCartasPorMao);
         return ResponseEntity.ok(jogoUseCases.jogar(qtdJogadores, qtdCartasPorMao));
     }
 
-    void validarParametrosDoJogo(int qtdJogadores, int qtdCartasPorMao) throws ParametrosDeJogoInvalidosException {
-        Map<String, String> errors = new HashMap<>();
-        if (qtdJogadores < 2 || qtdJogadores > 52)
-            errors.put("qtdJogadores", "Quantidade de jogadores (" + qtdJogadores + ") inválida!.");
-
-        if (qtdCartasPorMao < 1 || qtdCartasPorMao > 26)
-            errors.put("qtdCartasPorMao", "Quantidade de cartas por jogador (" + qtdCartasPorMao + ") inválida!.");
-
-        if(qtdJogadores*qtdCartasPorMao > 52)
-            errors.put("qtdCartasPorMao", "Quantidade de jogadores (" + qtdJogadores + ") e de cartas por mão (" + qtdCartasPorMao + ") ultrapassou a quantidade de cartas do baralho.");
-
-        if(!errors.isEmpty())
-            throw new ParametrosDeJogoInvalidosException("Erro de validação nos parâmetros do jogo.", errors);
-    }
 }
 

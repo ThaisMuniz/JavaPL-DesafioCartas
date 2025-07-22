@@ -1,11 +1,11 @@
 package com.desafio.cartas.infrastructure.adapters.out.entity;
 
-import com.desafio.cartas.domain.Jogador;
-import com.desafio.cartas.domain.Jogo;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="jogo")
@@ -25,19 +25,40 @@ public class JpaJogoEntity {
     private int qtdCartasPorMao;
 
     @OneToMany(mappedBy = "jogo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JpaMaoEntity> maos;
+    private List<JpaMaoEntity> maos = new ArrayList<>();
 
     @Column
     private String vencedores;
 
-    public JpaJogoEntity(){}
-
-    public JpaJogoEntity(Jogo jogo) {
-        this.dataHora = jogo.getDataHora();
-        this.qtdJogadores = jogo.getQtdJogadores();
-        this.qtdCartasPorMao = jogo.getQtdCartasPorMao();
-        this.maos = jogo.getMaos().stream().map(JpaMaoEntity::new).toList();
-        this.vencedores = jogo.getVencedores().stream().map(Jogador::nome).toList().toString();
+    public JpaJogoEntity(){
+        this.dataHora = Calendar.getInstance();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Calendar getDataHora() {
+        return dataHora;
+    }
+
+    public int getQtdJogadores() {
+        return qtdJogadores;
+    }
+
+    public int getQtdCartasPorMao() {
+        return qtdCartasPorMao;
+    }
+
+    public List<JpaMaoEntity> getMaos() {
+        return maos;
+    }
+
+    public String getVencedores() {
+        return vencedores;
+    }
+
+    public void setVencedores(String vencedores) {
+        this.vencedores = vencedores;
+    }
 }

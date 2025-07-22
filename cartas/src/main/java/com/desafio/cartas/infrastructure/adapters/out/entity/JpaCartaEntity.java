@@ -16,11 +16,9 @@ public class JpaCartaEntity {
     @Column(name = "valor")
     private String valor;
 
-    public JpaCartaEntity() {}
+    @Column(name="deckId")
+    private String deckId;
 
-    public JpaCartaEntity(String naipe, String valor) {
-        this.naipe = naipe;
-        this.valor = valor;
-    }
+    public JpaCartaEntity() {}
 
 }
